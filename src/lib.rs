@@ -152,14 +152,13 @@ impl GameState {
     }
 }
 
-turbo::go! {
+turbo::go!({
     let mut state = GameState::load();
     let paddle = &mut state.paddle;
     let ball = &mut state.ball;
 
-
-     // Move the paddle
-     let gp1 = gamepad(0);
+    // Move the paddle
+    let gp1 = gamepad(0);
 
     if state.lives > 0 {
         // Draw the paddle
@@ -192,7 +191,6 @@ turbo::go! {
             }
         }
 
-
         if gp1.left.pressed() && paddle.x > 0.0 {
             paddle.x -= paddle.speed;
         }
@@ -213,9 +211,7 @@ turbo::go! {
         }
 
         // Check ball collision with paddle
-        if ball.y + ball.radius > paddle.y
-            && ball.x > paddle.x
-            && ball.x < paddle.x + paddle.width
+        if ball.y + ball.radius > paddle.y && ball.x > paddle.x && ball.x < paddle.x + paddle.width
         {
             ball.velocity_y = -ball.velocity_y;
         }
@@ -253,15 +249,27 @@ turbo::go! {
 
     if state.game_over {
         // Draw game over text
-        text!("Game Over", font = Font::L, x = 100, y = 50, color = 0xffffffff);
-        text!("- press start -", x = 88, y = 84, font = Font::M, color = 0xffffffff);
-        if   gp1.start.just_pressed() {
+        text!(
+            "Game Over",
+            font = Font::L,
+            x = 100,
+            y = 50,
+            color = 0xffffffff
+        );
+        text!(
+            "- press start -",
+            x = 88,
+            y = 84,
+            font = Font::M,
+            color = 0xffffffff
+        );
+        if gp1.start.just_pressed() {
             state = GameState::new()
         }
     }
 
-     // Draw score on the screen
-     text!(
+    // Draw score on the screen
+    text!(
         &format!("Score: {}", state.score),
         font = Font::L,
         x = 10,
@@ -278,7 +286,6 @@ turbo::go! {
         color = 0xffffffff
     );
 
-
     // Save the game state for the next frame
     state.save();
-}
+});
