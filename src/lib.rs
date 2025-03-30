@@ -1,9 +1,3 @@
-turbo::cfg! {r#"
-    name = "Brick Breaker"
-    version = "1.0.0"
-    author = "Turbo"
-"#}
-
 turbo::init! {
     struct GameState {
         paddle: struct Paddle {
@@ -34,8 +28,8 @@ turbo::init! {
         game_over: bool,
     } = {
         let res = resolution();
-        let w = res[0] as f32;
-        let h = res[1] as f32;
+        let w = res.0 as f32;
+        let h = res.1 as f32;
         let paddle_width = 80.0;
         let paddle_height = 10.0;
         let ball_radius = 10.0;
@@ -96,8 +90,8 @@ impl GameState {
     // Create a new game state
     fn new() -> Self {
         let res = resolution();
-        let w = res[0] as f32;
-        let h = res[1] as f32;
+        let w = res.0 as f32;
+        let h = res.1 as f32;
         let paddle_width = 80.0;
         let paddle_height = 10.0;
         let ball_radius = 10.0;
@@ -251,7 +245,7 @@ turbo::go!({
         // Draw game over text
         text!(
             "Game Over",
-            font = Font::L,
+            font = "small",
             x = 100,
             y = 50,
             color = 0xffffffff
@@ -260,7 +254,7 @@ turbo::go!({
             "- press start -",
             x = 88,
             y = 84,
-            font = Font::M,
+            font = "small",
             color = 0xffffffff
         );
         if gp1.start.just_pressed() {
@@ -269,22 +263,12 @@ turbo::go!({
     }
 
     // Draw score on the screen
-    text!(
-        &format!("Score: {}", state.score),
-        font = Font::L,
-        x = 10,
-        y = 10,
-        color = 0xffffffff
-    );
+    let shows = &format!("Score: {}", state.score);
+    text!(shows, font = "small", x = 10, y = 10, color = 0xffffffff);
 
     // Draw score on the screen
-    text!(
-        &format!("Lives: {}", state.lives),
-        font = Font::L,
-        x = 100,
-        y = 10,
-        color = 0xffffffff
-    );
+    let show = &format!("Lives: {}", state.lives);
+    text!(show, font = "small", x = 100, y = 10, color = 0xffffffff);
 
     // Save the game state for the next frame
     state.save();
